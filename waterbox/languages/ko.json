@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "컨트롤러 포트의 TurboTap. 최대 5인용 게임을 위한 단자 5개가 있습니다. 머신의 일부이므로 무비에는 같은 값이 필요합니다.",
 		"slot.card": "HuCard",
-		"slot.card.help": "게임의 HuCard 파일: .pce, 또는 SuperGrafx 게임이면 .sgx. 음악 ROM .hes도 여기에 넣습니다.",
+		"slot.card.help": "게임의 HuCard 파일: .pce, 또는 SuperGrafx 게임이면 .sgx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "CD 게임의 .cue 파일. 그 안에 적힌 .bin, .img, .iso 파일을 같은 폴더에 둡니다. 또는 디스크 전체를 담은 .chd 파일 하나.",
 		"slot.laserdisc": "LaserActive 디스크",

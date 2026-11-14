@@ -45,10 +45,6 @@ Writes:
                  filled with a pattern made of its number.
   cd-test.chd    the same disc as a CHD, made by MAME's chdman when it is
                  installed (mame-tools); not written without it.
-  hes-test.hes   a music ROM: the HuCard program, which also plays a tune of
-                 16 notes on channel 0, bent by pad 1. Geargrafx 1.8.7 reads a
-                 .hes file as a HuCard image like this one; it has no player
-                 for HES files in the "HESM" format.
 
 RAM is the work RAM's first page ($2000 in the CPU's view).
 """
@@ -234,7 +230,7 @@ def cd_read(a):
     a.b(0x08, 0x00, 0x00, 0x00, 0x01, 0x00)
 
 
-def program(passes=1, cd=False, music=False):
+def program(passes=1, cd=False):
     a = Asm(0xE000)
     setup(a)
     if cd:
@@ -250,19 +246,7 @@ def program(passes=1, cd=False, music=False):
         a.b(0xA5, 0x10, 0x29, 0x3F, 0x4A, 0x4A, 0x4A, 0x4A, 0x85, 0x05)  # >> 4: the high byte
         a.jsr("cdread")
         a.label("nocd")
-    if music:
-        # a tune: channel 0's frequency steps through 16 notes, 8 frames
-        # each, bent by pad 1's byte
-        a.b(0xA5, 0x00, 0x4A, 0x4A, 0x4A, 0x29, 0x0F, 0xAA)  # LDA $00; LSR x3; AND #$0F; TAX
-        a.b(0xBD, 0, 0)                   # LDA notes,X
-        a.fix.append(("abs", len(a.out) - 2, "notes"))
-        a.b(0x45, 0x10, 0x8D, 0x02, 0x08)  # EOR $10; STA $0802
-        a.b(0x9C, 0x03, 0x08)             # STZ $0803: the frequency's high bits
     a.jmp("main")
-    if music:
-        a.label("notes")
-        a.b(0xD5, 0xBE, 0xA9, 0x9F, 0x8E, 0x7F, 0x71, 0x6A,
-            0x71, 0x7F, 0x8E, 0x9F, 0xA9, 0xBE, 0xD5, 0xEF)
     if cd:
         cd_read(a)
     a.label("rti")
@@ -270,8 +254,8 @@ def program(passes=1, cd=False, music=False):
     return a.resolve(), a.labels
 
 
-def cart(passes=1, cd=False, size=0x2000, music=False):
-    code, labels = program(passes, cd, music)
+def cart(passes=1, cd=False, size=0x2000):
+    code, labels = program(passes, cd)
     assert len(code) < 0x1FF0
     rom = bytearray(size)
     # the program in the card's first 8 KiB, which is what bank 0 maps at
@@ -309,8 +293,6 @@ def main():
         f.write(cart(2))
     with open(os.path.join(out, "cd-card.pce"), "wb") as f:
         f.write(cart(1, cd=True, size=0x40000))
-    with open(os.path.join(out, "hes-test.hes"), "wb") as f:
-        f.write(cart(music=True))
     disc(out)
     # the same disc as a CHD, when MAME's chdman is installed (mame-tools)
     chdman = shutil.which("chdman")

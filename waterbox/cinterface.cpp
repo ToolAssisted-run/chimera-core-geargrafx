@@ -372,6 +372,13 @@ ECL_EXPORT int Init(void)
 	}
 	else
 	{
+		/* .hes music files are not offered: neither Geargrafx nor this core
+		 * has a HES player, so a rip would load and play nothing */
+		if (has_extension(name, "hes"))
+		{
+			snprintf(g_loadError, sizeof g_loadError, "error.rejected" TEXT_ARG "%s", name);
+			return 0;
+		}
 		long size = 0;
 		uint8_t *rom = read_file(name, &size);
 		if (rom == NULL)

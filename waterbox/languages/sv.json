@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap i handkontrollporten, med fem uttag för spel med upp till fem spelare. Det hör till maskinen, så en film behöver samma värde.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Spelets HuCard-fil: .pce, eller .sgx för ett SuperGrafx-spel. Även en .hes-musik-ROM hör hit.",
+		"slot.card.help": "Spelets HuCard-fil: .pce, eller .sgx för ett SuperGrafx-spel.",
 		"slot.disc": "Cd",
 		"slot.disc.help": "Cd-spelets .cue-fil, med .bin-, .img- eller .iso-filerna den nämner i samma mapp. Eller en .chd-fil, som rymmer hela skivan.",
 		"slot.laserdisc": "LaserActive-skiva",

@@ -103,9 +103,8 @@ env -u DISPLAY <chimera>/build/meson-linux/source/ui/test-packages build/pkgtest
 ```
 
 The test programs are built at test time by `tests/pce-test/make-pce-test.py`
-(see its header): nothing to download, nothing commercial. A `.hes` here is
-a music ROM in HuCard form: Geargrafx 1.8.7 does not play HES files in the
-"HESM" format.
+(see its header): nothing to download, nothing commercial. `.hes` music
+files are not accepted (docs/PLAN.md says why).
 
 `run-local.sh` names its games (see the list at its top). Copy them into
 `tests/roms-local/` under those names; never link to a folder you do not own.

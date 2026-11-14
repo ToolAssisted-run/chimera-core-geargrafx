@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "The TurboTap in the controller port, with five sockets for games of up to five players. It is part of the machine, so a movie needs the same value.",
 		"slot.card": "HuCard",
-		"slot.card.help": "The game's HuCard file: .pce, or .sgx for a SuperGrafx game. A .hes music ROM goes here too.",
+		"slot.card.help": "The game's HuCard file: .pce, or .sgx for a SuperGrafx game.",
 		"slot.disc": "CD",
 		"slot.disc.help": "The CD game's .cue file, with the .bin, .img or .iso files it names in the same folder. Or one .chd file, which holds the whole disc.",
 		"slot.laserdisc": "LaserActive Disc",

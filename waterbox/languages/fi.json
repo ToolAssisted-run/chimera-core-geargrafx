@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap ohjainportissa, viidellä liitännällä enintään viiden pelaajan peleille. Se kuuluu koneeseen, joten elokuva tarvitsee saman arvon.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Pelin HuCard-tiedosto: .pce, tai .sgx SuperGrafx-pelille. Myös .hes-musiikki-ROM kuuluu tähän.",
+		"slot.card.help": "Pelin HuCard-tiedosto: .pce, tai .sgx SuperGrafx-pelille.",
 		"slot.disc": "CD",
 		"slot.disc.help": "CD-pelin .cue-tiedosto ja sen nimeämät .bin-, .img- tai .iso-tiedostot samassa kansiossa. Tai yksi .chd-tiedosto, joka sisältää koko levyn.",
 		"slot.laserdisc": "LaserActive-levy",

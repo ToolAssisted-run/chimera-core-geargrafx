@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "Kumanda girişindeki TurboTap; beş oyuncuya kadar oyunlar için beş girişi vardır. Makinenin bir parçasıdır, bu yüzden bir film aynı değere ihtiyaç duyar.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Oyunun HuCard dosyası: .pce ya da bir SuperGrafx oyunu için .sgx. Bir .hes müzik ROM'u da buraya gelir.",
+		"slot.card.help": "Oyunun HuCard dosyası: .pce ya da bir SuperGrafx oyunu için .sgx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "CD oyununun .cue dosyası, adını verdiği .bin, .img ya da .iso dosyalarıyla aynı klasörde. Ya da diskin tamamını içeren tek bir .chd dosyası.",
 		"slot.laserdisc": "LaserActive diski",

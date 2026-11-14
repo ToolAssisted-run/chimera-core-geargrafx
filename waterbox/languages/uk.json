@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap у порту контролера, з п'ятьма гніздами для ігор до п'яти гравців. Це частина машини, тому фільму потрібне те саме значення.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Файл HuCard гри: .pce або .sgx для гри SuperGrafx. Сюди ж кладеться музичний ROM .hes.",
+		"slot.card.help": "Файл HuCard гри: .pce або .sgx для гри SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Файл .cue гри на CD з названими в ньому файлами .bin, .img або .iso в тій самій теці. Або один файл .chd, у якому весь диск.",
 		"slot.laserdisc": "Диск LaserActive",

@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap di port pengendali, dengan lima soket untuk permainan hingga lima pemain. Ini bagian dari mesin, jadi film memerlukan nilai yang sama.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Berkas HuCard permainan: .pce, atau .sgx untuk permainan SuperGrafx. ROM musik .hes juga masuk ke sini.",
+		"slot.card.help": "Berkas HuCard permainan: .pce, atau .sgx untuk permainan SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Berkas .cue permainan CD, dengan berkas .bin, .img, atau .iso yang disebutnya di folder yang sama. Atau satu berkas .chd, yang memuat seluruh cakram.",
 		"slot.laserdisc": "Cakram LaserActive",

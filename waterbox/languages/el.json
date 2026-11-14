@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "Το TurboTap στη θύρα χειριστηρίου, με πέντε υποδοχές για παιχνίδια έως πέντε παικτών. Είναι μέρος της μηχανής, άρα μια ταινία χρειάζεται την ίδια τιμή.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Το αρχείο HuCard του παιχνιδιού: .pce, ή .sgx για παιχνίδι SuperGrafx. Εδώ μπαίνει και ένα μουσικό ROM .hes.",
+		"slot.card.help": "Το αρχείο HuCard του παιχνιδιού: .pce, ή .sgx για παιχνίδι SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Το αρχείο .cue του παιχνιδιού CD, με τα αρχεία .bin, .img ή .iso που ονομάζει στον ίδιο φάκελο. Ή ένα αρχείο .chd, που περιέχει όλο τον δίσκο.",
 		"slot.laserdisc": "Δίσκος LaserActive",

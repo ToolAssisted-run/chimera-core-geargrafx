@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "接在手把連接埠上的 TurboTap，有五個插孔，供最多五人的遊戲使用。它是機器的一部分，因此影片需要相同的值。",
 		"slot.card": "HuCard",
-		"slot.card.help": "遊戲的 HuCard 檔案：.pce，SuperGrafx 遊戲則為 .sgx。音樂 ROM .hes 也放在這裡。",
+		"slot.card.help": "遊戲的 HuCard 檔案：.pce，SuperGrafx 遊戲則為 .sgx。",
 		"slot.disc": "CD",
 		"slot.disc.help": "CD 遊戲的 .cue 檔案，以及其中列出的 .bin、.img 或 .iso 檔案，放在同一資料夾中。或一個包含整張光碟的 .chd 檔案。",
 		"slot.laserdisc": "LaserActive 光碟",

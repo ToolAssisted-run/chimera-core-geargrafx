@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap în portul de controler, cu cinci mufe pentru jocuri de până la cinci jucători. Face parte din mașină, deci un film are nevoie de aceeași valoare.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Fișierul HuCard al jocului: .pce, sau .sgx pentru un joc SuperGrafx. Tot aici merge și un ROM muzical .hes.",
+		"slot.card.help": "Fișierul HuCard al jocului: .pce, sau .sgx pentru un joc SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Fișierul .cue al jocului pe CD, cu fișierele .bin, .img sau .iso pe care le numește, în același dosar. Sau un fișier .chd, care conține tot discul.",
 		"slot.laserdisc": "Disc LaserActive",

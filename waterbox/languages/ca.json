@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "El TurboTap al port del comandament, amb cinc preses per a jocs de fins a cinc jugadors. Forma part de la màquina, així que una pel·lícula necessita el mateix valor.",
 		"slot.card": "HuCard",
-		"slot.card.help": "El fitxer HuCard del joc: .pce, o .sgx per a un joc de SuperGrafx. Aquí també hi va una ROM musical .hes.",
+		"slot.card.help": "El fitxer HuCard del joc: .pce, o .sgx per a un joc de SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "El fitxer .cue del joc en CD, amb els fitxers .bin, .img o .iso que anomena a la mateixa carpeta. O un fitxer .chd, que conté tot el disc.",
 		"slot.laserdisc": "Disc LaserActive",

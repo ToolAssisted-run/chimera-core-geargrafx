@@ -91,7 +91,8 @@ the game is (`gg_chimera_no_sgx`), and the `sgx` machine forces a SuperGrafx
 (upstream's own `GG_CONSOLE_SGX`). A SuperGrafx-only game on the PC Engine
 machine then does what it does on a real PC Engine.
 
-`.hes` music files and `.chd` discs: see "2026-11-14: .hes and .chd" below.
+`.chd` discs: see "2026-11-14: .hes and .chd" below; `.hes` music files are
+not offered (same place).
 
 ### The controls (2026-11-14)
 
@@ -237,6 +238,23 @@ in the window, Work RAM as the native reference and as the .cue run);
 contract tests 25 passed. Seen to fail: the .hes given to Geargrafx without
 its name (`hes:detected`), and .chd refused by the adapter (`chd:equivalence`,
 `chd:same-as-cue`, and in the window `chd:frontend`).
+
+### 2026-11-14: .hes dropped (user-decided, 2026-11-14)
+
+The owner asked for upstream's HES player to be brought into the core so
+that real HESM rips play. There is none: neither release 1.8.7 nor
+upstream's newest commit (7a2fe6b) reads the HESM format anywhere. The core
+loads a .hes as a HuCard image, and the desktop program only draws the
+sound chip's waveforms while one runs. So `.hes` is not offered: neither
+Geargrafx's core nor this one has a HES music player, so a real rip would
+load and play nothing. The card slot no longer takes `.hes`, the adapter
+refuses one by name (`error.rejected`, test `hes:refused`), and the
+HuCard-form music test file and its tests are gone. No .hes rip is among
+/home/jaffar/roms. `.chd` stays.
+
+Tests after the change: `run-gate.sh` 50 ok, 0 failed; `run-frontend.sh`
+7 ok; contract tests 25 passed. Seen to fail: the adapter's refusal taken
+out (`hes:refused`).
 
 ## 4. Open questions for the owner
 

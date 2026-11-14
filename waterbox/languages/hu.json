@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "A TurboTap a kontrollerportban, öt aljzattal legfeljebb ötszemélyes játékokhoz. A gép része, ezért egy filmnek ugyanaz az érték kell.",
 		"slot.card": "HuCard",
-		"slot.card.help": "A játék HuCard fájlja: .pce, vagy .sgx egy SuperGrafx játékhoz. Ide kerül a .hes zenei ROM is.",
+		"slot.card.help": "A játék HuCard fájlja: .pce, vagy .sgx egy SuperGrafx játékhoz.",
 		"slot.disc": "CD",
 		"slot.disc.help": "A CD-s játék .cue fájlja, az általa megnevezett .bin, .img vagy .iso fájlokkal ugyanabban a mappában. Vagy egyetlen .chd fájl, amely a teljes lemezt tartalmazza.",
 		"slot.laserdisc": "LaserActive lemez",

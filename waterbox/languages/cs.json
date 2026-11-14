@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap v portu ovladače, s pěti zásuvkami pro hry až pro pět hráčů. Je to součást stroje, takže film potřebuje stejnou hodnotu.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Soubor HuCard hry: .pce, nebo .sgx pro hru pro SuperGrafx. Patří sem i hudební ROM .hes.",
+		"slot.card.help": "Soubor HuCard hry: .pce, nebo .sgx pro hru pro SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Soubor .cue hry na CD, se soubory .bin, .img nebo .iso, které jmenuje, ve stejné složce. Nebo jeden soubor .chd, který obsahuje celý disk.",
 		"slot.laserdisc": "Disk LaserActive",

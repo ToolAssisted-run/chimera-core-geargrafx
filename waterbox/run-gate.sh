@@ -210,15 +210,17 @@ buttons pad6 "$wd" 24 9 III:241 IV:242 V:244 VI:248
 wd="$(workdir btnmouse card pce-test.pce '{"machine":"pce","port1":"mouse"}')"
 buttons mouse "$wd" 16 61 "Mouse Left":242 "Mouse Right":241
 
-# ---- a .hes music ROM: Geargrafx reads it as a HuCard image and says so ----
-wd="$(workdir hes card hes-test.hes '{"machine":"pce"}')"
-legs hes "$wd" "${ex[@]}"
-"$nat/run-native" "$wd" --frames 5 > /dev/null 2> "$work/hes.nat.err"
-"$nat/run-wbx" "$gst/core.wbx" "$wd" --frames 5 > /dev/null 2> "$work/hes.box.err"
-if grep -q 'Media is a HES music rom' "$work/hes.nat.err" && grep -q 'Media is a HES music rom' "$work/hes.box.err"; then
-	report "hes:detected" PASS "both builds load the .hes as a music ROM"
+# ---- a .hes file is refused: neither Geargrafx nor this core has a HES
+# music player, so one would load and play nothing ----
+wd="$(workdir hes card pce-test.pce '{"machine":"pce"}')"
+mv "$wd/pce-test.pce" "$wd/music.hes"
+printf '{"card":["music.hes"]}' > "$wd/slots"
+if "$nat/run-wbx" "$gst/core.wbx" "$wd" --frames 5 > /dev/null 2> "$work/hes.err"; then
+	report "hes:refused" FAIL "a .hes file was loaded"
+elif grep -q 'error.rejected' "$work/hes.err"; then
+	report "hes:refused" PASS "a .hes file is refused with error.rejected"
 else
-	report "hes:detected" FAIL "the .hes was not taken for a music ROM"
+	report "hes:refused" FAIL "refused, but not as a .hes: $(tail -1 "$work/hes.err")"
 fi
 
 # ---- the SuperGrafx ----

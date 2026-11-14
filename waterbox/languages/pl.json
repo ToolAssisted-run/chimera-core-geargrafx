@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap w porcie kontrolera, z pięcioma gniazdami dla gier do pięciu graczy. To część maszyny, więc film potrzebuje tej samej wartości.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Plik HuCard gry: .pce lub .sgx dla gry na SuperGrafx. Tu trafia też muzyczny ROM .hes.",
+		"slot.card.help": "Plik HuCard gry: .pce lub .sgx dla gry na SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Plik .cue gry na CD, z plikami .bin, .img lub .iso, które wymienia, w tym samym folderze. Albo jeden plik .chd, który zawiera całą płytę.",
 		"slot.laserdisc": "Płyta LaserActive",

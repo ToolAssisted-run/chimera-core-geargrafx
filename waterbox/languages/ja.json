@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "コントローラー端子につなぐ TurboTap。最大 5 人用のゲームのために 5 つの端子があります。マシンの一部なので、ムービーには同じ値が必要です。",
 		"slot.card": "HuCard",
-		"slot.card.help": "ゲームの HuCard ファイル: .pce、または SuperGrafx のゲームなら .sgx。音楽 ROM の .hes もここに入れます。",
+		"slot.card.help": "ゲームの HuCard ファイル: .pce、または SuperGrafx のゲームなら .sgx。",
 		"slot.disc": "CD",
 		"slot.disc.help": "CD ゲームの .cue ファイル。そこに書かれた .bin、.img、.iso ファイルを同じフォルダーに置きます。または、ディスク全体を収めた .chd ファイル 1 つ。",
 		"slot.laserdisc": "LaserActive ディスク",

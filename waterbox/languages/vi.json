@@ -83,7 +83,7 @@
 		"setting.turbotap": "TurboTap",
 		"setting.turbotap.about": "TurboTap ở cổng tay cầm, có năm cổng cho trò chơi tối đa năm người. Đây là một phần của máy, nên một phim cần cùng giá trị.",
 		"slot.card": "HuCard",
-		"slot.card.help": "Tệp HuCard của trò chơi: .pce, hoặc .sgx cho trò chơi SuperGrafx. ROM nhạc .hes cũng đặt ở đây.",
+		"slot.card.help": "Tệp HuCard của trò chơi: .pce, hoặc .sgx cho trò chơi SuperGrafx.",
 		"slot.disc": "CD",
 		"slot.disc.help": "Tệp .cue của trò chơi CD, với các tệp .bin, .img hoặc .iso nó nêu tên trong cùng thư mục. Hoặc một tệp .chd chứa toàn bộ đĩa.",
 		"slot.laserdisc": "Đĩa LaserActive",
