@@ -1,0 +1,155 @@
+Chimera hooks for Geargrafx, all under GG_CHIMERA (defined only by this
+repository's build, so upstream's own builds are unchanged):
+
+- the power-on random seed comes from the project's settings, not time(NULL);
+- the game reading its controller port is reported, for lag frames and for
+  Chimera's input-poll callback;
+- a PC Engine machine never becomes a SuperGrafx (by the game database or by
+  a .sgx extension); the SuperGrafx is a machine of its own;
+- a .cue disc keeps 8 pieces of its image in memory and a .chd disc 16 hunks,
+  where upstream keeps every piece it ever read: what is kept is in every
+  savestate.
+
+diff --git a/src/cdrom_chd_image.cpp b/src/cdrom_chd_image.cpp
+index bc78b91..9badaa8 100644
+--- a/src/cdrom_chd_image.cpp
++++ b/src/cdrom_chd_image.cpp
+@@ -584,6 +584,12 @@ bool CdRomChdImage::InitHunkCache()
+         InitPointer(m_hunk_cache[i]);
+     }
+ 
++#if defined(GG_CHIMERA)
++    for (u32 i = 0; i < GG_CHIMERA_CHD_CACHED_HUNKS; i++)
++        m_chimera_hunk_ring[i] = UINT32_MAX;
++    m_chimera_hunk_ring_pos = 0;
++#endif
++
+     return true;
+ }
+ 
+@@ -609,6 +615,13 @@ bool CdRomChdImage::LoadHunk(u32 hunk_index)
+ 
+     if (m_hunk_cache[hunk_index] == NULL)
+     {
++#if defined(GG_CHIMERA)
++        u32 evicted = m_chimera_hunk_ring[m_chimera_hunk_ring_pos];
++        if ((evicted != UINT32_MAX) && (evicted < m_hunk_count))
++            SafeDeleteArray(m_hunk_cache[evicted]);
++        m_chimera_hunk_ring[m_chimera_hunk_ring_pos] = hunk_index;
++        m_chimera_hunk_ring_pos = (m_chimera_hunk_ring_pos + 1) % GG_CHIMERA_CHD_CACHED_HUNKS;
++#endif
+         m_hunk_cache[hunk_index] = new u8[m_hunk_bytes];
+ 
+         Debug("Caching hunk %u", hunk_index);
+diff --git a/src/cdrom_chd_image.h b/src/cdrom_chd_image.h
+index 7aba92c..aa77d67 100644
+--- a/src/cdrom_chd_image.h
++++ b/src/cdrom_chd_image.h
+@@ -52,6 +52,10 @@ private:
+     u8** m_hunk_cache;
+     u32 m_hunk_bytes;
+     u32 m_hunk_count;
++#if defined(GG_CHIMERA)
++    u32 m_chimera_hunk_ring[GG_CHIMERA_CHD_CACHED_HUNKS];
++    u32 m_chimera_hunk_ring_pos;
++#endif
+     u32 m_sectors_per_hunk;
+ 
+ private:
+diff --git a/src/cdrom_cuebin_image.h b/src/cdrom_cuebin_image.h
+index d0daea5..8472387 100644
+--- a/src/cdrom_cuebin_image.h
++++ b/src/cdrom_cuebin_image.h
+@@ -187,7 +187,11 @@ INLINE GG_CdRomCueBinLoadOptions GG_CdRomCueBinDefaultLoadOptions()
+     options.chunk_size = (2352 * 32);
+     options.max_preload_chunks = 1;
+     options.read_ahead_chunks = 0;
++#if defined(GG_CHIMERA)
++    options.max_cached_chunks = GG_CHIMERA_CUE_CACHED_CHUNKS;
++#else
+     options.max_cached_chunks = 0;
++#endif
+     options.allow_disc_preload = true;
+     options.enable_read_ahead = false;
+     options.track_files_start_at_index1 = false;
+diff --git a/src/defines.h b/src/defines.h
+index 31b76f1..c5b1d9a 100644
+--- a/src/defines.h
++++ b/src/defines.h
+@@ -113,4 +113,16 @@
+     #endif
+ #endif
+ 
++#if defined(GG_CHIMERA)
++/* Built as a Chimera core (a frontend for tool-assisted speedruns). Chimera's
++ * adapter defines these; every use is under GG_CHIMERA. */
++extern unsigned int gg_chimera_random_seed; /* the power-on seed: a project setting, never the clock */
++extern bool gg_chimera_no_sgx;              /* the machine is a PC Engine: never a SuperGrafx */
++extern void gg_chimera_input_read(void);    /* the game read its controller port */
++/* How much of a disc image is kept in memory. Every piece kept is in every
++ * savestate, so a long game must not keep the whole disc. */
++#define GG_CHIMERA_CUE_CACHED_CHUNKS 8
++#define GG_CHIMERA_CHD_CACHED_HUNKS 16
++#endif
++
+ #endif /* DEFINES_H */
+diff --git a/src/geargrafx_core.cpp b/src/geargrafx_core.cpp
+index 9336d82..c169815 100644
+--- a/src/geargrafx_core.cpp
++++ b/src/geargrafx_core.cpp
+@@ -110,7 +110,11 @@ void GeargrafxCore::Init(GG_Input_Pump_Fn input_pump_fn, GG_Pixel_Format pixel_f
+     m_laseractive = new LaserActive(m_cdrom_media);
+     m_media = new Media(m_cdrom_media);
+     m_random = new Random();
++#if defined(GG_CHIMERA)
++    m_random->Seed((u32)gg_chimera_random_seed);
++#else
+     m_random->Seed((u32)time(NULL));
++#endif
+     m_huc6280 = new HuC6280(m_random);
+     m_huc6270_1 = new HuC6270(m_huc6280);
+     m_huc6270_2 = new HuC6270(m_huc6280);
+diff --git a/src/input_inline.h b/src/input_inline.h
+index f05d24f..fb41d2e 100644
+--- a/src/input_inline.h
++++ b/src/input_inline.h
+@@ -73,6 +73,9 @@ INLINE bool Input::IsKeyPressed(GG_Controllers controller, GG_Keys key) const
+ INLINE u8 Input::ReadK()
+ {
+     u8 result;
++#if defined(GG_CHIMERA)
++    gg_chimera_input_read();
++#endif
+     if (m_turbolink.IsCableConnected() && m_clr)
+     {
+         u64 cycles = GetTurboLinkCycles();
+diff --git a/src/media.cpp b/src/media.cpp
+index 3c5f979..0a2dc85 100644
+--- a/src/media.cpp
++++ b/src/media.cpp
+@@ -938,13 +938,25 @@ void Media::GatherMediaInfo()
+         Log("Forcing SuperGrafx (SGX) because of user request");
+     }
+ 
++#if defined(GG_CHIMERA)
++    if (gg_chimera_no_sgx && m_is_sgx)
++    {
++        m_is_sgx = false;
++        Log("Not a SuperGrafx: the machine is a PC Engine");
++    }
++#endif
++
+     if (strcmp(m_file_extension, "hes") == 0)
+     {
+         m_is_hes = true;
+         Log("Media is a HES music rom");
+     }
+ 
++#if defined(GG_CHIMERA)
++    if (!gg_chimera_no_sgx && !m_is_sgx && (strcmp(m_file_extension, "sgx") == 0))
++#else
+     if (!m_is_sgx && (strcmp(m_file_extension, "sgx") == 0))
++#endif
+     {
+         m_is_sgx = true;
+         Log("Forcing SuperGrafx (SGX) because of extension");

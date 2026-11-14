@@ -1,0 +1,72 @@
+{
+  "package": "geargrafx",
+  "effectiveTerms": "GPL-3.0",
+  "commercialUse": "allowed under the GPL",
+  "note": "Geargrafx is GPL-3.0, and the built core, which links it with this repository's adapter, is distributed under those terms. The libraries Geargrafx carries in its source tree (platforms/shared/dependencies) are listed below with their own terms; all of them may be combined into a GPL-3.0 program.",
+  "components": [
+    {
+      "name": "chimera-core-geargrafx (the adapter, the patches, the build, the test programs)",
+      "license": "GPL-3.0",
+      "url": "https://github.com/ToolAssisted-run/chimera-core-geargrafx",
+      "commit": "{selfCommit}",
+      "file": "LICENSE"
+    },
+    {
+      "name": "Geargrafx",
+      "license": "GPL-3.0",
+      "url": "https://github.com/drhelius/Geargrafx",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/LICENSE",
+      "sourceUrl": "https://github.com/drhelius/Geargrafx/archive/{commit}.tar.gz"
+    },
+    {
+      "name": "libchdr, inside Geargrafx",
+      "license": "BSD-3-Clause",
+      "url": "https://github.com/rtissera/libchdr",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/libchdr/LICENSE.txt"
+    },
+    {
+      "name": "LZMA SDK, inside Geargrafx",
+      "license": "Public domain",
+      "url": "https://www.7-zip.org/sdk.html",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/lzma/LICENSE"
+    },
+    {
+      "name": "zstd (the decoder), inside Geargrafx",
+      "license": "BSD-3-Clause or GPL-2.0",
+      "url": "https://github.com/facebook/zstd",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/zstd/zstddeclib.c"
+    },
+    {
+      "name": "miniz, inside Geargrafx",
+      "license": "MIT",
+      "url": "https://github.com/richgel999/miniz",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/miniz/miniz.c"
+    },
+    {
+      "name": "minivorbis (libogg and libvorbis), inside Geargrafx",
+      "license": "BSD-3-Clause",
+      "url": "https://github.com/edubart/minivorbis",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/minivorbis/LICENSE.txt"
+    },
+    {
+      "name": "QON and QOI2 (the LaserActive's video), inside Geargrafx",
+      "license": "MIT",
+      "url": "https://github.com/drhelius/Geargrafx",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/shared/dependencies/qon/qon.h"
+    },
+    {
+      "name": "libretro.h (the logging interface the adapter answers), inside Geargrafx",
+      "license": "MIT",
+      "url": "https://github.com/libretro/RetroArch",
+      "commit": "{submodule:extern/geargrafx}",
+      "file": "extern/geargrafx/platforms/libretro/libretro.h"
+    }
+  ]
+}

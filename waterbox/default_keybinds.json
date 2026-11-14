@@ -1,0 +1,27 @@
+{
+  "_comment": "Default bindings for the controller this package declares, the same as the Chimera Mesen core's for the PC Engine: the frontend uses them for a controller the user's setup has never seen, and Config > Controls' Defaults button comes back to them. Player 1 is bound to keys and a gamepad; players 2 to 5 (the TurboTap's) are left unbound. The Avenue Pad 6's III to VI are C, A, S and D. The mouse in port 1 moves as the mouse moves, with its two buttons. Power is left unbound so that no key press restarts a run by accident.",
+  "AllTrollers": {
+    "PC Engine Controller": {
+      "P1 Up": "Up, J1 POV0U, X1 DpadUp, X1 LStickUp",
+      "P1 Down": "Down, J1 POV0D, X1 DpadDown, X1 LStickDown",
+      "P1 Left": "Left, J1 POV0L, X1 DpadLeft, X1 LStickLeft",
+      "P1 Right": "Right, J1 POV0R, X1 DpadRight, X1 LStickRight",
+      "P1 II": "Z, J1 B1, X1 X",
+      "P1 I": "X, J1 B2, X1 A",
+      "P1 Select": "Space, J1 B9, X1 Back",
+      "P1 Run": "Enter, J1 B10, X1 Start",
+      "P1 III": "C, J1 B3, X1 B",
+      "P1 IV": "A, J1 B4, X1 Y",
+      "P1 V": "S, J1 B5, X1 LeftShoulder",
+      "P1 VI": "D, J1 B6, X1 RightShoulder",
+      "P1 Mouse Left": "WMouse L",
+      "P1 Mouse Right": "WMouse R"
+    }
+  },
+  "AllTrollersAnalog": {
+    "PC Engine Controller": {
+      "P1 Mouse X": { "Value": "RMouse X", "Mult": 1.0, "Deadzone": 0.0 },
+      "P1 Mouse Y": { "Value": "RMouse Y", "Mult": 1.0, "Deadzone": 0.0 }
+    }
+  }
+}

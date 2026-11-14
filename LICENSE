@@ -1,0 +1,23 @@
+This repository is licensed as follows:
+
+- Everything original to this repository (waterbox/, the build scripts, the
+  meson files, tests/pce-test/, docs/) is under the GNU General Public
+  License, version 3, the licence of Geargrafx itself. patches/ are changes
+  to Geargrafx's source, so they are under its terms anyway.
+
+- Geargrafx is the submodule extern/geargrafx, unmodified, under its own
+  licence: GPL-3.0 (extern/geargrafx/LICENSE). The libraries inside it keep
+  their own terms (waterbox/package-licenses.json lists them).
+
+- The test programs (tests/pce-test/make-pce-test.py builds them: two HuCard
+  programs, a stand-in for the CD System Card and a small disc) are this
+  repository's own, under GPL-3.0. They are not NEC's or anybody else's
+  firmware.
+
+- The built core (core.wbx and the package) is Geargrafx linked with this
+  repository's adapter, and is distributed under GPL-3.0.
+
+The full text of the GPL-3.0 is in extern/geargrafx/LICENSE and at
+https://www.gnu.org/licenses/gpl-3.0.txt.
+
+Copyright (c) 2026 Sergio Martin

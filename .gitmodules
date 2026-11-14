@@ -1,0 +1,3 @@
+[submodule "extern/geargrafx"]
+	path = extern/geargrafx
+	url = https://github.com/drhelius/Geargrafx.git
