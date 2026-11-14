@@ -20,8 +20,11 @@ Two placeholders are used throughout:
 
   ```
   sudo apt-get update
-  sudo apt-get install -y --no-install-recommends meson ninja-build build-essential python3
+  sudo apt-get install -y --no-install-recommends meson ninja-build build-essential python3 mame-tools
   ```
+
+  mame-tools gives chdman, which makes the CHD test disc; without it the
+  CHD tests SKIP (core) or fail (frontend).
 
   The guest is compiled by the same gcc and g++ through miniBox's musl specs
   file; there is no separate cross compiler.
@@ -86,10 +89,10 @@ ninja -C build/meson-native && ninja -C build/meson-guest core.wbx
 # native == sandbox == savestate every frame, over this repository's own test
 # programs; the engine tests run too when CHIMERA_ROOT names a Chimera
 # checkout with this package installed
-CHIMERA_ROOT=<chimera> ./waterbox/run-gate.sh       # 44 ok, 0 failed
+CHIMERA_ROOT=<chimera> ./waterbox/run-gate.sh       # 54 ok, 0 failed
 
 # the package in Chimera's window, headless
-env -u DISPLAY ./waterbox/tests/run-frontend.sh --chimera-root <chimera>   # 6 ok
+env -u DISPLAY ./waterbox/tests/run-frontend.sh --chimera-root <chimera>   # 7 ok
 
 # Chimera's contract tests, on a folder holding only this package
 mkdir -p build/pkgtest && cp <chimera>/build/Cores/geargrafx.chimeraCore build/pkgtest/
@@ -100,7 +103,9 @@ env -u DISPLAY <chimera>/build/meson-linux/source/ui/test-packages build/pkgtest
 ```
 
 The test programs are built at test time by `tests/pce-test/make-pce-test.py`
-(see its header): nothing to download, nothing commercial.
+(see its header): nothing to download, nothing commercial. A `.hes` here is
+a music ROM in HuCard form: Geargrafx 1.8.7 does not play HES files in the
+"HESM" format.
 
 `run-local.sh` names its games (see the list at its top). Copy them into
 `tests/roms-local/` under those names; never link to a folder you do not own.

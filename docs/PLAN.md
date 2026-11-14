@@ -91,9 +91,7 @@ the game is (`gg_chimera_no_sgx`), and the `sgx` machine forces a SuperGrafx
 (upstream's own `GG_CONSOLE_SGX`). A SuperGrafx-only game on the PC Engine
 machine then does what it does on a real PC Engine.
 
-`.hes` music files and `.chd` discs are read by Geargrafx but not offered:
-neither was tried (no free .hes or .chd at hand, and no chdman in the
-container to make one).
+`.hes` music files and `.chd` discs: see "2026-11-14: .hes and .chd" below.
 
 ### The controls (2026-11-14)
 
@@ -206,6 +204,40 @@ audio and ADPCM driven by a game, a game's use of the mouse, the Avenue Pad 3
 and the MB128 (each is only exercised through the port by our program), and
 the LaserActive beyond its refusal without a PAC BIOS.
 
+### 2026-11-14: .hes and .chd, and the LaserActive (user-decided, 2026-11-14)
+
+The owner decided: offer `.hes` and `.chd`, each tested with a free file made
+at test time; keep the LaserActive declared, but boot it with the owner's
+PAC BIOS before the core is published, or drop it; run the two CD games when
+the System Cards arrive.
+
+- **.hes.** Geargrafx 1.8.7 has no player for HES files in the "HESM" format
+  (a header, a load address and an init routine): it loads any .hes as a
+  HuCard image and only marks it as music for its desktop program's
+  visualiser. A HESM file made here loaded and ran none of its code. So what
+  is offered, and tested, is what Geargrafx plays: a music ROM in HuCard form
+  with the .hes extension (`hes-test.hes`, our HuCard program with a 16-note
+  tune). The card slot takes `.hes`. A HESM rip will not play.
+- **.chd.** `tests/pce-test/make-pce-test.py` makes `cd-test.chd` from the
+  test disc with MAME's chdman (mame-tools, installed in the container and
+  in CI; two runs make the same file, SHA-1 9779cfc8...). A .chd is one file,
+  so the disc slot needs nothing Chimera does not have: `formats` gains
+  `chd`. The test disc grew to 1024 sectors and the stand-in card reads
+  every 8 frames across it, so both disc readers give pieces back (6 times
+  each in 600 frames, counted once with a temporary print).
+- **LaserActive and the CD games.** /home/jaffar/firmware did not exist yet
+  on jaffanator01 and no .mmi disc is among /home/jaffar/roms, so the
+  LaserActive was not booted and the CD games were not run. Both are still
+  to do before publishing.
+
+Tests after the change: `run-gate.sh` 54 ok, 0 failed (new: `hes:*`, 5;
+`chd:*`, 5, among them `chd:same-as-cue`, the .chd machine frame for frame
+the .cue one); `run-frontend.sh` 7 ok (new: `chd:frontend`, a .chd project
+in the window, Work RAM as the native reference and as the .cue run);
+contract tests 25 passed. Seen to fail: the .hes given to Geargrafx without
+its name (`hes:detected`), and .chd refused by the adapter (`chd:equivalence`,
+`chd:same-as-cue`, and in the window `chd:frontend`).
+
 ## 4. Open questions for the owner
 
 - The LaserActive's PAC BIOS files are declared by size (512 KiB) and name
@@ -213,4 +245,3 @@ the LaserActive beyond its refusal without a PAC BIOS.
   CRC-32 (PAC-N1 A8CB694C, PCE-LP1 76116A02, PAC-N10 01223DD5). Pin them
   when the files arrive. The LaserActive machine was never booted: no .mmi
   disc image and no PAC BIOS were available.
-- `.hes` and `.chd` are left out until a free file of each can be tested.

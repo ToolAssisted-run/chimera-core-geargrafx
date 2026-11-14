@@ -11,6 +11,7 @@
 #   sgx:frontend      the SuperGrafx machine
 #   pcecd:frontend    the PC Engine CD, with the stand-in System Card given as
 #                     the project's firmware
+#   chd:frontend      the same disc as one .chd file
 #   keybinds          the package's key bindings are the window's when nobody
 #                     changed them
 #
@@ -164,6 +165,18 @@ if frontend_leg "pcecd:frontend" cd '{"machine":"pcecd"}' disc cd-test.cue PCECD
 	else
 		report "pcecd:frontend" FAIL "the same as the native reference, but no sector of the disc was read"
 	fi
+fi
+
+if [ -f "$work/roms/cd-test.chd" ]; then
+	if frontend_leg "chd:frontend" chd '{"machine":"pcecd"}' disc cd-test.chd PCECD "" "" cd-card.pce; then
+		if cmp -s "$work/chd.ram.bin" "$work/cd.ram.bin"; then
+			report "chd:frontend" PASS "the same disc as one .chd file: Work RAM identical to the native reference and to the .cue run"
+		else
+			report "chd:frontend" FAIL "the same as its native reference, but not the machine the .cue disc made"
+		fi
+	fi
+else
+	report "chd:frontend" FAIL "no chdman (install mame-tools) to make the .chd"
 fi
 
 # --- the bindings the package ships are the machine's when nobody changed them ---

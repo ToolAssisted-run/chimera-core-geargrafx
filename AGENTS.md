@@ -41,8 +41,8 @@ meson setup $MB/build/meson-cpp $MB -Dguest_cpp=true && meson compile -C $MB/bui
 meson setup build/meson-native -Dminibox_dir=$MB && ninja -C build/meson-native
 sh waterbox/setup-guest.sh -m $MB && ninja -C build/meson-guest core.wbx
 ./waterbox/build-package.sh -m $MB -r <chimera>
-CHIMERA_ROOT=<chimera> ./waterbox/run-gate.sh              # 44 ok, 0 failed
-env -u DISPLAY ./waterbox/tests/run-frontend.sh --chimera-root <chimera>   # 6 ok
+CHIMERA_ROOT=<chimera> ./waterbox/run-gate.sh              # 54 ok, 0 failed
+env -u DISPLAY ./waterbox/tests/run-frontend.sh --chimera-root <chimera>   # 7 ok
 ./waterbox/tests/run-local.sh                              # SKIPs what is not in tests/roms-local
 ```
 

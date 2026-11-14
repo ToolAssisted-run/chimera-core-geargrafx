@@ -74,7 +74,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends meson ninja-build build-essential python3
+          sudo apt-get install -y --no-install-recommends meson ninja-build build-essential python3 mame-tools
 
       - name: Check out miniBox
         working-directory: chimera-checkout
@@ -204,6 +204,9 @@ jobs:
           mkdir -p build/pkgtest
           cp chimera-checkout/build/Cores/geargrafx.chimeraCore build/pkgtest/
           env -u DISPLAY chimera-checkout/build/meson-linux/source/ui/test-packages build/pkgtest
+
+      - name: Install chdman (mame-tools), which makes the CHD test disc
+        run: sudo apt-get install -y --no-install-recommends mame-tools
 
       - name: The core test script's tests through Chimera's engine
         # the whole native build now that miniBox's host library is there:

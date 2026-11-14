@@ -37,14 +37,24 @@ Writes:
                  (a SCSI READ through the CD interface at $1800-$1808) and
                  copies the first 256 bytes into RAM $0200-$02FF; RAM $02
                  counts the sectors read, RAM $03 holds the last status byte.
-                 It repeats the read every 64 frames with the sector number
-                 from pad 1's byte, so input moves what the drive reads.
-  cd-test.cue,   a disc of one data track of 64 sectors of 2048 bytes; each
-  cd-test.iso    sector is filled with a pattern made of its own number.
+                 It repeats the read every 8 frames, of sector 16 times
+                 (pad 1's byte & 63), so input moves what the drive reads and
+                 the reads cross the disc.
+  cd-test.cue,   a disc of one data track of 1024 sectors of 2048 bytes; each
+  cd-test.iso    sector starts "GGT" and the low byte of its number, and is
+                 filled with a pattern made of its number.
+  cd-test.chd    the same disc as a CHD, made by MAME's chdman when it is
+                 installed (mame-tools); not written without it.
+  hes-test.hes   a music ROM: the HuCard program, which also plays a tune of
+                 16 notes on channel 0, bent by pad 1. Geargrafx 1.8.7 reads a
+                 .hes file as a HuCard image like this one; it has no player
+                 for HES files in the "HESM" format.
 
 RAM is the work RAM's first page ($2000 in the CPU's view).
 """
 import os
+import shutil
+import subprocess
 import sys
 
 
@@ -176,7 +186,8 @@ def cd_read(a):
     a.jsr("req")
     a.b(0xB9, 0, 0)                       # LDA cmdbytes,Y
     a.fix.append(("abs", len(a.out) - 2, "cmdbytes"))
-    a.b(0xC0, 0x03, 0xD0, 0x02, 0xA5, 0x04)  # CPY #3; BNE +2; LDA $04 (the sector)
+    a.b(0xC0, 0x02, 0xD0, 0x02, 0xA5, 0x05)  # CPY #2; BNE +2; LDA $05 (the sector's high byte)
+    a.b(0xC0, 0x03, 0xD0, 0x02, 0xA5, 0x04)  # CPY #3; BNE +2; LDA $04 (its low byte)
     a.b(0x8D, 0x01, 0x18)                 # STA $1801
     a.jsr("ack")
     a.b(0xC8, 0xC0, 0x06)                 # INY; CPY #6
@@ -223,22 +234,35 @@ def cd_read(a):
     a.b(0x08, 0x00, 0x00, 0x00, 0x01, 0x00)
 
 
-def program(passes=1, cd=False):
+def program(passes=1, cd=False, music=False):
     a = Asm(0xE000)
     setup(a)
     if cd:
-        a.b(0x64, 0x04)                   # STZ $04: sector 0
-        a.jsr("cdread")
+        a.jsr("cdread")                   # sector 0 ($04/$05 are cleared)
     a.label("main")
     frame(a, passes)
     if cd:
-        # every 64 frames, read the sector pad 1's byte names (of 64)
-        a.b(0xA5, 0x00, 0x29, 0x3F)       # LDA $00; AND #$3F
+        # every 8 frames, read sector 16 * (pad 1's byte & 63): sectors 0
+        # to 1008 of the 1024, so the disc's caches fill and give pieces back
+        a.b(0xA5, 0x00, 0x29, 0x07)       # LDA $00; AND #$07
         a.br(0xD0, "nocd")
-        a.b(0xA5, 0x10, 0x29, 0x3F, 0x85, 0x04)  # LDA $10; AND #$3F; STA $04
+        a.b(0xA5, 0x10, 0x29, 0x3F, 0x0A, 0x0A, 0x0A, 0x0A, 0x85, 0x04)  # << 4: the low byte
+        a.b(0xA5, 0x10, 0x29, 0x3F, 0x4A, 0x4A, 0x4A, 0x4A, 0x85, 0x05)  # >> 4: the high byte
         a.jsr("cdread")
         a.label("nocd")
+    if music:
+        # a tune: channel 0's frequency steps through 16 notes, 8 frames
+        # each, bent by pad 1's byte
+        a.b(0xA5, 0x00, 0x4A, 0x4A, 0x4A, 0x29, 0x0F, 0xAA)  # LDA $00; LSR x3; AND #$0F; TAX
+        a.b(0xBD, 0, 0)                   # LDA notes,X
+        a.fix.append(("abs", len(a.out) - 2, "notes"))
+        a.b(0x45, 0x10, 0x8D, 0x02, 0x08)  # EOR $10; STA $0802
+        a.b(0x9C, 0x03, 0x08)             # STZ $0803: the frequency's high bits
     a.jmp("main")
+    if music:
+        a.label("notes")
+        a.b(0xD5, 0xBE, 0xA9, 0x9F, 0x8E, 0x7F, 0x71, 0x6A,
+            0x71, 0x7F, 0x8E, 0x9F, 0xA9, 0xBE, 0xD5, 0xEF)
     if cd:
         cd_read(a)
     a.label("rti")
@@ -246,8 +270,8 @@ def program(passes=1, cd=False):
     return a.resolve(), a.labels
 
 
-def cart(passes=1, cd=False, size=0x2000):
-    code, labels = program(passes, cd)
+def cart(passes=1, cd=False, size=0x2000, music=False):
+    code, labels = program(passes, cd, music)
     assert len(code) < 0x1FF0
     rom = bytearray(size)
     # the program in the card's first 8 KiB, which is what bank 0 maps at
@@ -261,11 +285,11 @@ def cart(passes=1, cd=False, size=0x2000):
 
 def disc(out):
     sectors = bytearray()
-    for n in range(64):
+    for n in range(1024):
         sector = bytearray(2048)
         for i in range(2048):
             sector[i] = (n * 37 + i * 7 + (i >> 8)) & 0xFF
-        sector[0:4] = b"GGT" + bytes([n])
+        sector[0:4] = b"GGT" + bytes([n & 0xFF])
         sectors += sector
     with open(os.path.join(out, "cd-test.iso"), "wb") as f:
         f.write(sectors)
@@ -285,7 +309,15 @@ def main():
         f.write(cart(2))
     with open(os.path.join(out, "cd-card.pce"), "wb") as f:
         f.write(cart(1, cd=True, size=0x40000))
+    with open(os.path.join(out, "hes-test.hes"), "wb") as f:
+        f.write(cart(music=True))
     disc(out)
+    # the same disc as a CHD, when MAME's chdman is installed (mame-tools)
+    chdman = shutil.which("chdman")
+    if chdman:
+        subprocess.run([chdman, "createcd", "-f", "-i", os.path.join(out, "cd-test.cue"),
+                        "-o", os.path.join(out, "cd-test.chd")], check=True,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 if __name__ == "__main__":

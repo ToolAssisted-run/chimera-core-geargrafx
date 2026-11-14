@@ -8,9 +8,9 @@ plays the same on every machine.
 
 Systems, one package:
 
-- PC Engine / TurboGrafx-16 (HuCards)
+- PC Engine / TurboGrafx-16 (HuCards, and .hes music ROMs in HuCard form)
 - SuperGrafx
-- PC Engine CD: CD-ROM2, Super CD-ROM2 and Arcade CD-ROM2
+- PC Engine CD: CD-ROM2, Super CD-ROM2 and Arcade CD-ROM2 (.cue or .chd)
 - LaserActive with the PC Engine pack (LD-ROM2): built in, never booted
   here (see `docs/PLAN.md`)
 

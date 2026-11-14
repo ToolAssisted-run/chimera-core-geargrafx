@@ -210,6 +210,17 @@ buttons pad6 "$wd" 24 9 III:241 IV:242 V:244 VI:248
 wd="$(workdir btnmouse card pce-test.pce '{"machine":"pce","port1":"mouse"}')"
 buttons mouse "$wd" 16 61 "Mouse Left":242 "Mouse Right":241
 
+# ---- a .hes music ROM: Geargrafx reads it as a HuCard image and says so ----
+wd="$(workdir hes card hes-test.hes '{"machine":"pce"}')"
+legs hes "$wd" "${ex[@]}"
+"$nat/run-native" "$wd" --frames 5 > /dev/null 2> "$work/hes.nat.err"
+"$nat/run-wbx" "$gst/core.wbx" "$wd" --frames 5 > /dev/null 2> "$work/hes.box.err"
+if grep -q 'Media is a HES music rom' "$work/hes.nat.err" && grep -q 'Media is a HES music rom' "$work/hes.box.err"; then
+	report "hes:detected" PASS "both builds load the .hes as a music ROM"
+else
+	report "hes:detected" FAIL "the .hes was not taken for a music ROM"
+fi
+
 # ---- the SuperGrafx ----
 wd="$(workdir sgx card sgx-test.sgx '{"machine":"sgx"}')"
 legs sgx "$wd" "${ex[@]}"
@@ -255,6 +266,25 @@ elif grep -q 'error.no_card' "$work/nocard.err"; then
 	report "pcecd:card-required" PASS "a disc with no System Card is refused with error.no_card"
 else
 	report "pcecd:card-required" FAIL "refused, but not for the card: $(tail -1 "$work/nocard.err")"
+fi
+
+# ---- the same disc as a CHD (made by MAME's chdman, mame-tools) ----
+# The drive reads the same sectors whatever file holds them, so the machine
+# must end as the .cue one did. The stand-in reads cross the disc's 1024
+# sectors, more than the 16 hunks of 8 sectors the CHD reader keeps
+# (patches/0001), so pieces are given back and read again.
+if [ -f "$roms/cd-test.chd" ]; then
+	wd="$(workdir chd disc cd-test.chd '{"machine":"pcecd"}' cd-card.pce=syscard)"
+	legs chd "$wd" "${ex[@]}"
+	if [ ! -f "$work/box.chd.txt" ]; then
+		report "chd:same-as-cue" FAIL "the CHD machine did not run"
+	elif cmp -s "$work/box.chd.txt" "$work/box.pcecd.txt"; then
+		report "chd:same-as-cue" PASS "the .chd disc made the machine the .cue disc made, frame for frame"
+	else
+		report "chd:same-as-cue" FAIL "$(diff "$work/box.pcecd.txt" "$work/box.chd.txt" | tr '\n' ' ' | head -c 120)"
+	fi
+else
+	report "chd:equivalence" SKIP "no chdman (install mame-tools) to make the .chd"
 fi
 
 # ---- the LaserActive: no disc image or PAC BIOS is free to hand out, so
