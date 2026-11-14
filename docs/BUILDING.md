@@ -2,7 +2,7 @@
 
 This repository builds Geargrafx as a sandboxed guest (`core.wbx`) and
 packages it as one file, `geargrafx.chimeraCore`, which Chimera loads as a
-PC Engine / TurboGrafx-16, a SuperGrafx, a PC Engine CD or a LaserActive. The
+PC Engine / TurboGrafx-16, a SuperGrafx or a PC Engine CD. The
 steps are the ones `.github/workflows/chimera.yml` runs from a fresh clone.
 
 Two placeholders are used throughout:
@@ -120,8 +120,6 @@ CD games also need the System Card there as `syscard3.pce`.
   (2BEA3DAC98F84B2F2F469FA77EA720B8770D598D), `syscard1.pce`
   (A39A66DA7DE6BA94AB84D04EEF7AFEEC7D4EE66A) or the Games Express card
   `gexpress.pce` (014881A959E045E00F4DB8F52955200865D40280).
-- LaserActive: a PAC BIOS of 512 KiB, `pac-n1.bin`, `pce-lp1.bin` or
-  `pac-n10.bin` (no SHA-1 pinned yet).
 - The games.
 
 ## Troubleshooting

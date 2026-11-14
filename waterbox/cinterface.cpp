@@ -1,7 +1,8 @@
 /* cinterface.cpp - Geargrafx behind Chimera's guest ABI.
  *
  * Geargrafx (https://github.com/drhelius/Geargrafx) is a PC Engine /
- * TurboGrafx-16, SuperGrafx, CD-ROM2 and LaserActive emulator. This file
+ * TurboGrafx-16, SuperGrafx, CD-ROM2 and LaserActive emulator. The
+ * LaserActive is not offered here (docs/PLAN.md). This file
  * plays the part upstream's libretro frontend (platforms/libretro/
  * libretro.cpp) plays: it reads the project's settings and files, builds the
  * machine, hands the controllers' state to it and runs it a frame at a time.
@@ -60,7 +61,7 @@ static void log_to_stderr(enum retro_log_level level, const char *fmt, ...)
 retro_log_printf_t log_cb = log_to_stderr;
 
 /* ---- the machines (the "machine" setting) ---- */
-enum Machine { M_PCE = 0, M_SGX, M_PCECD, M_LASERACTIVE };
+enum Machine { M_PCE = 0, M_SGX, M_PCECD };
 static int g_machine;
 
 static char g_loadError[512];
@@ -182,28 +183,6 @@ static int load_card(void)
 	return 1;
 }
 
-static int load_pac_bios(void)
-{
-	long size = 0;
-	uint8_t *bios = read_file("pacbios", &size);
-	if (bios == NULL)
-	{
-		snprintf(g_loadError, sizeof g_loadError, "error.no_pac");
-		return 0;
-	}
-	GG_LaserActive_Region region = setting_is("laseractiveBios", "pacN10", "pacN1")
-		? GG_LASERACTIVE_REGION_US : GG_LASERACTIVE_REGION_JAPAN;
-	g_core->SetLaserActiveRegion(region);
-	int ok = g_core->LoadPacBiosFromBuffer(bios, (int)size, region);
-	free(bios);
-	if (!ok)
-	{
-		snprintf(g_loadError, sizeof g_loadError, "error.bad_pac");
-		return 0;
-	}
-	return 1;
-}
-
 /* A saved game the project starts from (the "savedata" slot): the backup
  * memory's 2 KiB, or an MB128's 128 KiB, told apart by size. */
 static void load_savedata(void)
@@ -247,7 +226,6 @@ ECL_EXPORT int Init(void)
 	wbx_setting_str("machine", machine, sizeof machine);
 	if (strcmp(machine, "sgx") == 0) g_machine = M_SGX;
 	else if (strcmp(machine, "pcecd") == 0) g_machine = M_PCECD;
-	else if (strcmp(machine, "laseractive") == 0) g_machine = M_LASERACTIVE;
 	else g_machine = M_PCE;
 
 	/* what the machine is at power on: upstream's random registers, palette
@@ -340,10 +318,8 @@ ECL_EXPORT int Init(void)
 	/* the firmware, then the game */
 	if (g_machine == M_PCECD && !load_card())
 		return 0;
-	if (g_machine == M_LASERACTIVE && !load_pac_bios())
-		return 0;
 
-	const char *slot = g_machine == M_PCECD ? "disc" : g_machine == M_LASERACTIVE ? "laserdisc" : "card";
+	const char *slot = g_machine == M_PCECD ? "disc" : "card";
 	char name[512];
 	if (wbx_slot_count(slot) <= 0 || wbx_slot_name(slot, 0, name, sizeof name) == NULL)
 	{
@@ -351,9 +327,9 @@ ECL_EXPORT int Init(void)
 		return 0;
 	}
 
-	if (g_machine == M_PCECD || g_machine == M_LASERACTIVE)
+	if (g_machine == M_PCECD)
 	{
-		if (g_machine == M_PCECD && !has_extension(name, "cue") && !has_extension(name, "chd"))
+		if (!has_extension(name, "cue") && !has_extension(name, "chd"))
 		{
 			snprintf(g_loadError, sizeof g_loadError, "error.not_disc" TEXT_ARG "%s", name);
 			return 0;
@@ -405,8 +381,8 @@ ECL_EXPORT int Init(void)
 	load_savedata();
 
 	/* one greppable line per boot, so a test can say what was built */
-	fprintf(stderr, "[geargrafx] machine=%s sgx=%d cdrom=%d laseractive=%d mb128=%d\n", machine,
-		media->IsSGX() ? 1 : 0, media->IsCDROMHardwareEnabled() ? 1 : 0, media->IsLaserActive() ? 1 : 0,
+	fprintf(stderr, "[geargrafx] machine=%s sgx=%d cdrom=%d mb128=%d\n", machine,
+		media->IsSGX() ? 1 : 0, media->IsCDROMHardwareEnabled() ? 1 : 0,
 		input->GetMB128()->IsConnected() ? 1 : 0);
 
 	g_inited = 1;

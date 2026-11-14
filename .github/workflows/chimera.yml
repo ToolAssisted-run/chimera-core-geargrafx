@@ -8,8 +8,7 @@ name: chimera waterbox core
 #
 # What a runner cannot run: commercial games and NEC's System Cards
 # (waterbox/tests/run-local.sh over tests/roms-local, run by hand where the
-# files are), and the LaserActive beyond its refusal without a PAC BIOS (no
-# free disc image or PAC BIOS exists).
+# files are).
 
 on:
   pull_request:

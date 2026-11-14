@@ -256,10 +256,45 @@ Tests after the change: `run-gate.sh` 50 ok, 0 failed; `run-frontend.sh`
 7 ok; contract tests 25 passed. Seen to fail: the adapter's refusal taken
 out (`hes:refused`).
 
+### 2026-11-14: the owner's firmware and CD games; the LaserActive dropped (user-decided, 2026-11-14)
+
+**System Cards.** The owner's files in /home/jaffar/firmware match every
+SHA-1 pinned here: syscard3.pce (also as "PCECD_3.0-(J).pce"), syscard3u,
+syscard2, syscard2u, syscard1 and the Games Express card (also as
+"PCECD_gecard.pce"). "Super CD 3.1.pce" (SHA-1 7b3fa6c2..., not a card
+Geargrafx's list knows) is not pinned.
+
+**CD games**, with syscard3.pce, through `run-local.sh` (copied into
+tests/roms-local): the System Card stops at PUSH RUN BUTTON, so the script
+now holds Run at frames 300 to 307 and starts the pad exercise at 600 (the
+first run, with the exercise from frame 0, wandered into the card's own
+backup memory menu and never started either disc). 6000 frames each, native
+== sandbox == a savestate before every frame:
+- F1 Team Simulation Project F (JP) [f0d0e14b28c2]: past its title into the
+  game's own menus (it ended on its DATA SAVE screen).
+- Magical Dinosaur Tour (US) [fe82ba299fcb], with the Japanese card: boots
+  and plays its intro streamed from the disc (space, the Earth, a forest
+  scene by frame 6000, looked at). Its menus were not reached.
+These are the only two CD games in /home/jaffar/roms/pcEngineCD. No game
+with CD audio or ADPCM in play was checked by ear.
+
+**The LaserActive is dropped.** Geargrafx boots the LD-ROM2 pack only with
+its 512 KiB PAC BIOS (PAC-N1, PCE-LP1 or PAC-N10, CRC-32 A8CB694C, 76116A02,
+01223DD5). Every LaserActive BIOS file in /home/jaffar/firmware is 128 KiB
+(two dumps, SHA-1 26237b33... for Japan and 8af16222... for the USA, under
+several names), with other CRC-32s (00EEDB3A, 3B10CF41): they are not the
+LD-ROM2 pack's program, and Geargrafx refuses them by size. No .mmi disc
+image is in /home/jaffar/roms. So it could not boot, and as the owner
+decided, the machine, its firmware, its slot, its setting and their texts
+(26 languages) are gone from the package. Geargrafx's LaserActive code is
+still compiled in (upstream's sources), unreachable.
+
+Tests after the change: `run-gate.sh` 49 ok, 0 failed (the LaserActive's
+refusal test went with it); `run-frontend.sh` 7 ok; contract tests 25
+passed; `run-local.sh` 8 games, 8 passed (the six HuCards also at 6000
+frames).
+
 ## 4. Open questions for the owner
 
-- The LaserActive's PAC BIOS files are declared by size (512 KiB) and name
-  only, with no SHA-1: none was at hand to hash. Geargrafx knows them by
-  CRC-32 (PAC-N1 A8CB694C, PCE-LP1 76116A02, PAC-N10 01223DD5). Pin them
-  when the files arrive. The LaserActive machine was never booted: no .mmi
-  disc image and no PAC BIOS were available.
+- The LaserActive could come back with the LD-ROM2 pack's 512 KiB PAC BIOS
+  and an .mmi disc image to boot it with.

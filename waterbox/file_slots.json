@@ -1,5 +1,5 @@
 {
-  "_comment": "The kinds of file a project of this core holds; Chimera's New Project window is built from it. A project is one HuCard, or one CD (its .cue file and the files it names, or one .chd file), or one LaserActive disc image (.mmi), and the saved game it starts from if it has one.",
+  "_comment": "The kinds of file a project of this core holds; Chimera's New Project window is built from it. A project is one HuCard, or one CD (its .cue file and the files it names, or one .chd file), and the saved game it starts from if it has one.",
   "slots": [
     {
       "id": "card",
@@ -32,20 +32,6 @@
       "exposedWhen": {
         "setting": "machine",
         "is": "pcecd"
-      }
-    },
-    {
-      "id": "laserdisc",
-      "title": "slot.laserdisc",
-      "min": 1,
-      "max": 1,
-      "formats": [
-        "mmi"
-      ],
-      "help": "slot.laserdisc.help",
-      "exposedWhen": {
-        "setting": "machine",
-        "is": "laseractive"
       }
     },
     {

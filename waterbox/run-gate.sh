@@ -289,18 +289,6 @@ else
 	report "chd:equivalence" SKIP "no chdman (install mame-tools) to make the .chd"
 fi
 
-# ---- the LaserActive: no disc image or PAC BIOS is free to hand out, so
-# only the refusal without the PAC BIOS is tested ----
-wd="$(workdir la laserdisc cd-test.cue '{"machine":"laseractive"}')"
-printf '{"laserdisc":["cd-test.cue"]}' > "$wd/slots"
-if "$nat/run-wbx" "$gst/core.wbx" "$wd" --frames 5 > /dev/null 2> "$work/nopac.err"; then
-	report "laseractive:pac-required" FAIL "a LaserActive started with no PAC BIOS"
-elif grep -q 'error.no_pac' "$work/nopac.err"; then
-	report "laseractive:pac-required" PASS "a LaserActive with no PAC BIOS is refused with error.no_pac"
-else
-	report "laseractive:pac-required" FAIL "refused, but not for the PAC BIOS: $(tail -1 "$work/nopac.err")"
-fi
-
 # ---- what the machine is at power on: a seed the project pins ----
 wd="$(workdir seed card pce-test.pce '{"machine":"pce","randomSeed":1}')"
 run_nat "$wd" --frames 60 > "$work/s1n.txt"

@@ -7,9 +7,13 @@
 # every memory domain, and the exercise must have changed the machine.
 #
 # A game or firmware file that is not in tests/roms-local is a SKIP, named.
-# CD games also need the System Card there, as syscard3.pce.
+# The sandbox run's last picture is kept in build/local-shots/<tag>.tga, to
+# see how far the game got.
+# CD games also need the System Card there, as syscard3.pce; Run is pressed at
+# its title screen to start the disc before the pad exercise begins.
 #
 # Usage: ./waterbox/tests/run-local.sh [-n <native build dir>] [-g <guest build dir>] [--frames N]
+#        [--only <part of a tag>]
 set -u
 
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -18,11 +22,13 @@ nat="$root/build/meson-native"
 gst="$root/build/meson-guest"
 local_dir="$root/tests/roms-local"
 frames=3000
+only=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 		-n) nat="$2"; shift ;;
 		-g) gst="$2"; shift ;;
 		--frames) frames="$2"; shift ;;
+		--only) only="$2"; shift ;;
 		*) echo "unknown option: $1" >&2; exit 2 ;;
 	esac
 	shift
@@ -51,6 +57,7 @@ games=(
 
 for g in "${games[@]}"; do
 	IFS='|' read -r tag file slot settings fw extra <<< "$g"
+	case "$tag" in *"$only"*) ;; *) continue ;; esac
 	if [ ! -f "$local_dir/$file" ]; then
 		report "$tag" SKIP "tests/roms-local/$file is not there"; continue
 	fi
@@ -70,8 +77,21 @@ for g in "${games[@]}"; do
 	sha="$(sha1sum "$local_dir/$file" | cut -c1-12)"
 	# shellcheck disable=SC2086
 	args=(--frames "$frames" --exercise $extra)
+	if [ "$slot" = disc ]; then
+		# the System Card waits at PUSH RUN BUTTON: Run held for frames 300 to
+		# 307 starts the disc, and the pad exercise takes over at frame 600.
+		# Without it the random pad wanders into the card's own menus.
+		python3 -c "
+for f in range(600):
+    l = ['.'] * 63
+    if 300 <= f < 308: l[8] = 'R'
+    print(''.join(l))" > "$wd/boot.inputs"
+		args+=(--inputs "$wd/boot.inputs")
+	fi
 	"$nat/run-native" "$wd" "${args[@]}" 2>/dev/null | digests > "$work/n.txt"
-	"$nat/run-wbx" "$gst/core.wbx" "$wd" "${args[@]}" 2>"$work/b.err" | digests > "$work/b.txt"
+	mkdir -p "$root/build/local-shots"
+	"$nat/run-wbx" "$gst/core.wbx" "$wd" "${args[@]}" --screenshot "$root/build/local-shots/$tag.tga" \
+		2>"$work/b.err" | digests > "$work/b.txt"
 	"$nat/run-wbx" "$gst/core.wbx" "$wd" "${args[@]}" --rerecord 2>/dev/null | digests > "$work/r.txt"
 	"$nat/run-wbx" "$gst/core.wbx" "$wd" --frames "$frames" 2>/dev/null | digests > "$work/i.txt"
 	lag="$(sed -n 's/^lagFrames=//p' "$work/b.txt")"
