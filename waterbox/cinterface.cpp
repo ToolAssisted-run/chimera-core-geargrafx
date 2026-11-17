@@ -27,6 +27,12 @@
 
 #include "geargrafx.h"
 
+/* this core's windows in Chimera's Emulator menu: miniBox's ready-made Export
+ * Save Data, built on its exports (Chimera has no tool of its own for a core,
+ * Chimera issue 610) */
+#define WBX_WINDOWS_IMPLEMENTATION
+#include <waterbox_windows.h>
+
 /* A text a person reads is a key of languages/en.json, each of its arguments
  * after a TEXT_ARG (Chimera's docs/translations.md). */
 #define TEXT_ARG "\x1f"
